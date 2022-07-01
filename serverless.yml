@@ -65,6 +65,8 @@ functions:
       - http:
           path: hello
           method: get
+    environment:
+      APP_ENV_VARIABLE: Serverless v1.x
 #    events:
 #      - httpApi:
 #          path: /users/create
@@ -97,10 +99,15 @@ functions:
 #          conditions:
 #            host: example.com
 #            path: /hello
-
+  users:
+    handler: com.serverless.UserHandler
+    events:
+      - http:
+          path: /users
+          method: post
 #    Define function environment variables here
     environment:
-      APP_ENV_VARIABLE: Serverless v1.x
+      APP_ENV_VARIABLE: Serverless v1.x Part 2
 
 # you can add CloudFormation resource templates here
 #resources:
@@ -113,3 +120,33 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+resources:
+  Resources:
+    UsersDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: uuid
+            AttributeType: S
+          #-
+          #  AttributeName: name
+          #  AttributeType: S
+          #-
+          #  AttributeName: surname
+          #  AttributeType: S
+        KeySchema:
+          -
+            AttributeName: uuid
+            KeyType: HASH
+          #-
+          #  AttributeName: name
+          #  KeyType: RANGE
+          #-
+          #  AttributeName: surname
+          #  KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: Users

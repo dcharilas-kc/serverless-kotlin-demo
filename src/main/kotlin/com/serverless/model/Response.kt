@@ -1,4 +1,4 @@
-package com.serverless
+package com.serverless.model
 
 class Response(message:String, input:Map<String, Any>) {
   val message: String = message

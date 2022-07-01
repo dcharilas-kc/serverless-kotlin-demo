@@ -1,4 +1,4 @@
-package com.serverless
+package com.serverless.model
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -7,17 +7,13 @@ import org.apache.logging.log4j.Logger
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-class ApiGatewayResponse(
+class UserResponse(
         val statusCode: Int = 200,
-        var body: String? = null,
-        val headers: Map<String, String>? = Collections.emptyMap(),
-        val isBase64Encoded: Boolean = false
+        var body: String? = null
 ) {
     private constructor(builder: Builder) : this(
             builder.statusCode,
-            builder.rawBody,
-            builder.headers,
-            builder.base64Encoded
+            builder.rawBody
     )
 
     companion object {
@@ -25,17 +21,14 @@ class ApiGatewayResponse(
     }
 
     class Builder {
-        var LOG: Logger = LogManager.getLogger(ApiGatewayResponse.Builder::class.java)
+        var LOG: Logger = LogManager.getLogger(Builder::class.java)
         var objectMapper: ObjectMapper = ObjectMapper()
 
         var statusCode: Int = 200
         var rawBody: String? = null
-        var headers: Map<String, String>? = Collections.emptyMap()
-        var objectBody: Response? = null
+        var objectBody: List<User>? = null
         var binaryBody: ByteArray? = null
-        var base64Encoded: Boolean = false
-
-        fun build(): ApiGatewayResponse {
+        fun build(): UserResponse {
             var body: String? = null
 
             if (rawBody != null) {
@@ -50,7 +43,7 @@ class ApiGatewayResponse(
             } else if (binaryBody != null) {
                 body = String(Base64.getEncoder().encode(binaryBody), StandardCharsets.UTF_8)
             }
-            return ApiGatewayResponse(statusCode, body, headers, base64Encoded)
+            return UserResponse(statusCode, body)
         }
     }
 }
