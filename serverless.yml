@@ -99,8 +99,8 @@ functions:
 #            path: /hello
 
 #    Define function environment variables here
-#    environment:
-#      variable2: value2
+    environment:
+      APP_ENV_VARIABLE: Serverless v1.x
 
 # you can add CloudFormation resource templates here
 #resources:
